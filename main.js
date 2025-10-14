@@ -40,7 +40,7 @@ let mission2TimeLimit = 60;
 let M2FailTimer = null;
 
 // --- Audio ---
-const audio = createAudio(); // 오디오 컨텍스트 생성
+const audio = createAudio();
 
 // --- Persona Parameters ---
 const paramsSets = {
@@ -240,8 +240,11 @@ function buildMission2() {
     const mazeWidth = maze[0].length * wallThickness;
     const mazeDepth = maze.length * wallThickness;
     mission2Bounds = {
-        minX: -mazeWidth / 2 - 2, maxX: mazeWidth / 2 + 2,
-        minZ: startZ - mazeDepth - 5, maxZ: startZ + 2
+        minX: -mazeWidth / 2 - 2,
+        maxX: mazeWidth / 2 + 2,
+        minZ: startZ - mazeDepth - 5,
+        maxZ: startZ + 2,
+        maxY: pillarHeight - 0.5 // 보이지 않는 천장 높이 설정
     };
 
     if (M2FailTimer) clearTimeout(M2FailTimer);
@@ -371,6 +374,11 @@ function checkBounds() {
         drone.position.z = mission2Bounds.maxZ;
         velocity.z *= -0.5;
     }
+    // 천장 체크
+    if (drone.position.y > mission2Bounds.maxY) {
+        drone.position.y = mission2Bounds.maxY;
+        velocity.y *= -0.1;
+    }
 }
 
 
@@ -395,30 +403,33 @@ ${chk(checklist.leading)} Teaching & leading`;
 // Audio
 // ────────────────────────────────────────────────────────────
 function createAudio(){
-  const ctx = new (window.AudioContext || window.webkitAudioContext)();
-  if (!ctx) return { play: ()=>{} };
-  const master = ctx.createGain();
-  master.gain.value = 0.15;
-  master.connect(ctx.destination);
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const master = ctx.createGain();
+    master.gain.value = 0.15;
+    master.connect(ctx.destination);
 
-  const playBeep = (freq=880, dur=0.12, type='sine')=>{
-    if (ctx.state === 'suspended') ctx.resume();
-    const t = ctx.currentTime + 0.01;
-    const o = ctx.createOscillator();
-    const g = ctx.createGain();
-    o.type = type; o.frequency.setValueAtTime(freq, t);
-    g.gain.setValueAtTime(0, t);
-    g.gain.linearRampToValueAtTime(1.0, t+0.01);
-    g.gain.exponentialRampToValueAtTime(0.001, t+dur);
-    o.connect(g).connect(master);
-    o.start(t); o.stop(t+dur+0.02);
-  };
+    const playBeep = (freq=880, dur=0.12, type='sine')=>{
+      if (ctx.state === 'suspended') ctx.resume();
+      const t = ctx.currentTime + 0.01;
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = type; o.frequency.setValueAtTime(freq, t);
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(1.0, t+0.01);
+      g.gain.exponentialRampToValueAtTime(0.001, t+dur);
+      o.connect(g).connect(master);
+      o.start(t); o.stop(t+dur+0.02);
+    };
 
-  return {
-    pass: ()=> playBeep(1046, 0.09, 'triangle'),
-    impact: ()=> playBeep(180, 0.14, 'sawtooth'),
-    complete: ()=> { playBeep(880, 0.12, 'sine'); setTimeout(()=>playBeep(1175,0.12,'sine'),90); setTimeout(()=>playBeep(1480,0.16,'sine'),180); }
-  };
+    return {
+      pass: ()=> playBeep(1046, 0.09, 'triangle'),
+      impact: ()=> playBeep(180, 0.14, 'sawtooth'),
+      complete: ()=> { playBeep(880, 0.12, 'sine'); setTimeout(()=>playBeep(1175,0.12,'sine'),90); setTimeout(()=>playBeep(1480,0.16,'sine'),180); }
+    };
+  } catch(e) {
+    return { pass: ()=>{}, impact: ()=>{}, complete: ()=>{} };
+  }
 }
 
 function playSfx(kind){
@@ -428,7 +439,6 @@ function playSfx(kind){
     else if (kind==='complete') audio.complete();
   }catch(e){}
 }
-
 
 // ────────────────────────────────────────────────────────────
 // UI Effects & Boilerplate
