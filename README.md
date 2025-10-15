@@ -4,6 +4,7 @@ Drone Pilot: Systems Thinker Trial
 단순한 드론 게임을 넘어, 시스템 사고를 증명하는 인터랙티브 포트폴리오 프로젝트입니다.
 
 🔗 Live Demo 바로가기
+https://jaewoo4200.github.io/AI_Drone_Game/
 
 🚀 프로젝트 의도
 이 프로젝트는 '부품이 아닌 시스템을 설계하는 사람'이라는 개발자의 정체성을 게임적 상호작용으로 증명하고자 기획되었습니다. 플레이어는 단순히 드론을 조종하는 것을 넘어, 다음과 같은 시스템적 트레이드오프와 문제 해결 과정을 직접 체험하게 됩니다.
@@ -53,8 +54,7 @@ Drone Pilot: Systems Thinker Trial
 More than just a drone game, this is an interactive portfolio project designed to demonstrate a systems thinking approach.
 
 🔗 Play the Live Demo
-
-Please replace <Your-GitHub-ID> and <Repository-Name> with your own information.
+https://jaewoo4200.github.io/AI_Drone_Game/
 
 🚀 Project Intent
 This project was conceived to prove the developer's identity as "one who designs systems, not just components" through interactive gameplay. Players do more than simply pilot a drone; they directly experience systemic trade-offs and problem-solving processes, such as:
