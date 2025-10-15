@@ -6,7 +6,7 @@ Drone Pilot: Systems Thinker Trial
 🔗 Live Demo 바로가기 / Play the Live Demo
 https://jaewoo4200.github.io/AI_Drone_Game/
 
-## 🇰🇷 Korean
+## Korean
 
 ### 🎯 프로젝트 의도
 
@@ -44,7 +44,7 @@ https://jaewoo4200.github.io/AI_Drone_Game/
 
 -----
 
-## 🇬🇧 English
+## English
 
 ### 🎯 Project Intent
 
